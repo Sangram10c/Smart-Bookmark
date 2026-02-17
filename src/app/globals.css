@@ -1,0 +1,123 @@
+/* Global styles: Tailwind base + design tokens + animations */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Design Tokens ─────────────────────────────────────────────────── */
+:root {
+  /* Warm parchment palette */
+  --bg:           #f7f4ef;
+  --bg-card:      #fdfbf8;
+  --border:       #e2ddd6;
+  --border-hover: #c8c0b5;
+
+  --text-primary:   #1a1714;
+  --text-secondary: #6b6157;
+  --text-muted:     #9e9189;
+
+  --accent:       #c0522a;   /* terracotta */
+  --accent-soft:  #f0e6df;
+  --accent-hover: #a84522;
+
+  --success:      #2a7a4b;
+  --danger:       #b83b3b;
+  --danger-soft:  #fdf0f0;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+
+  --shadow-sm: 0 1px 3px rgba(30,20,10,.06), 0 1px 2px rgba(30,20,10,.04);
+  --shadow-md: 0 4px 12px rgba(30,20,10,.08), 0 2px 4px rgba(30,20,10,.05);
+  --shadow-lg: 0 12px 32px rgba(30,20,10,.12), 0 4px 8px rgba(30,20,10,.06);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────── */
+html, body {
+  background-color: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-mono), 'Courier New', monospace;
+  min-height: 100vh;
+}
+
+/* Subtle paper-grain texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+}
+
+/* ── Typography ────────────────────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-display), Georgia, serif;
+}
+
+/* ── Scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar        { width: 6px; }
+::-webkit-scrollbar-track  { background: var(--bg); }
+::-webkit-scrollbar-thumb  { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--border-hover); }
+
+/* ── Focus ring ────────────────────────────────────────────────────── */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ── Keyframe Animations ───────────────────────────────────────────── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bookmarkIn {
+  from { opacity: 0; transform: scale(0.96) translateY(6px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Animation utility classes ─────────────────────────────────────── */
+.animate-fade-in     { animation: fadeIn     0.4s  ease both; }
+.animate-slide-up    { animation: slideUp    0.35s ease both; }
+.animate-bookmark-in { animation: bookmarkIn 0.35s cubic-bezier(0.34,1.56,0.64,1) both; }
+
+/* ── Skeleton loading shimmer ──────────────────────────────────────── */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--border) 25%,
+    var(--bg-card) 50%,
+    var(--border) 75%
+  );
+  background-size: 400px 100%;
+  animation: shimmer 1.4s infinite;
+}
+
+/* ── Loading spinner ───────────────────────────────────────────────── */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
