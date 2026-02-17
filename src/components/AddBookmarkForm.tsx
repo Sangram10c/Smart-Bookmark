@@ -1,12 +1,4 @@
 'use client'
-// Controlled form for adding a new bookmark
-//
-// Flow:
-//   1. User fills URL + Title
-//   2. On submit → POST /api/bookmarks
-//   3. On success → calls onAdd() for optimistic UI update + resets form
-//   4. URL onBlur → auto-suggests hostname as title placeholder
-
 import { useState, useRef, type FormEvent } from 'react'
 import type { Bookmark } from '@/types'
 
@@ -22,8 +14,7 @@ export default function AddBookmarkForm({ onAdd }: Props) {
   const [success, setSuccess] = useState(false)
   const urlInputRef = useRef<HTMLInputElement>(null)
 
-  // When user leaves the URL field and title is empty,
-  // suggest the domain name as the title
+ 
   async function handleUrlBlur() {
     if (!url || title) return
     try {
@@ -60,13 +51,13 @@ export default function AddBookmarkForm({ onAdd }: Props) {
       // Notify parent for optimistic update
       onAdd(data.bookmark as Bookmark)
 
-      // Reset form and return focus to URL field
+      
       setUrl('')
       setTitle('')
       setSuccess(true)
       urlInputRef.current?.focus()
 
-      // Clear the success state after 2 seconds
+      
       setTimeout(() => setSuccess(false), 2000)
     } catch {
       setError('Network error — please try again.')
@@ -165,7 +156,7 @@ export default function AddBookmarkForm({ onAdd }: Props) {
           />
         </div>
 
-        {/* Error display */}
+        
         {error && (
           <p
             className="text-xs animate-fade-in"
@@ -175,7 +166,7 @@ export default function AddBookmarkForm({ onAdd }: Props) {
           </p>
         )}
 
-        {/* Submit button — changes to green checkmark on success */}
+      
         <button
           type="submit"
           disabled={loading || !url || !title}

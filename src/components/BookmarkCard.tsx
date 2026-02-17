@@ -1,17 +1,4 @@
 'use client'
-// Single bookmark row component
-//
-// Displays:
-//   • Favicon (Google's public favicon API)
-//   • Title (clickable link → opens in new tab)
-//   • Truncated URL + relative timestamp
-//   • On hover: External-link icon + Delete button (owner only)
-//
-// Delete flow:
-//   1. Optimistically calls onDelete() to remove from state immediately
-//   2. Fires DELETE /api/bookmarks?id=<id> in background
-//   Realtime DELETE event arrives shortly after and is handled idempotently
-
 import { useState } from 'react'
 import type { Bookmark } from '@/types'
 
@@ -51,10 +38,10 @@ export default function BookmarkCard({ bookmark, onDelete, isOwner }: Props) {
     if (deleting) return
     setDeleting(true)
 
-    // 1. Remove from UI immediately (optimistic)
+    
     onDelete(bookmark.id)
 
-    // 2. Fire the actual delete request
+    
     try {
       await fetch(`/api/bookmarks?id=${bookmark.id}`, { method: 'DELETE' })
     } catch {
@@ -108,7 +95,7 @@ export default function BookmarkCard({ bookmark, onDelete, isOwner }: Props) {
         )}
       </div>
 
-      {/* ── Content ──────────────────────────────────────────────────── */}
+      
       <div className="flex-1 min-w-0">
         {/* Title — links to URL in new tab */}
         <a
@@ -143,7 +130,7 @@ export default function BookmarkCard({ bookmark, onDelete, isOwner }: Props) {
         </div>
       </div>
 
-      {/* ── Action buttons (visible on hover) ────────────────────────── */}
+      
       <div className="flex items-center gap-1 flex-shrink-0">
 
         {/* External link button */}

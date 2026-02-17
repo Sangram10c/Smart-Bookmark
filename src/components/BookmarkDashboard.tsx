@@ -1,21 +1,4 @@
 'use client'
-// Main dashboard — Client Component
-//
-// Responsibilities:
-//   • Sticky header: logo, user avatar, sign-out button
-//   • Renders AddBookmarkForm and BookmarkList
-//   • Subscribes to Supabase Realtime so any INSERT or DELETE on the
-//     bookmarks table is pushed to ALL open tabs for this user instantly
-//
-// Real-time architecture:
-//   supabase.channel('bookmarks-<userId>')
-//     .on('postgres_changes', { event: 'INSERT', filter: `user_id=eq.<id>` })
-//     .on('postgres_changes', { event: 'DELETE', filter: `user_id=eq.<id>` })
-//     .subscribe()
-//
-// The filter ensures only THIS user's events come through.
-// Supabase RLS enforces the same constraint server-side.
-
 import { useEffect, useState, useCallback } from 'react'
 import Image from 'next/image'
 import type { User } from '@supabase/supabase-js'
@@ -51,8 +34,7 @@ export default function BookmarkDashboard({ user, initialBookmarks }: Props) {
         (payload) => {
           setBookmarks((prev) => {
             const incoming = payload.new as Bookmark
-            // Dedup: the tab that did the INSERT may have already added it
-            // optimistically — don't show it twice
+            
             if (prev.some((b) => b.id === incoming.id)) return prev
             return [incoming, ...prev]
           })
@@ -78,12 +60,7 @@ export default function BookmarkDashboard({ user, initialBookmarks }: Props) {
     return () => {
       supabase.removeChannel(channel)
     }
-  }, [user.id]) // eslint-disable-line react-hooks/exhaustive-deps
-
-  // ── Optimistic add ────────────────────────────────────────────────────
-  // Called by AddBookmarkForm after a successful POST /api/bookmarks
-  // Adds the bookmark to local state immediately for a snappy UX
-  // The Realtime echo arrives shortly after; dedup check above prevents duplicates
+  }, [user.id]) 
   const handleAdd = useCallback((bookmark: Bookmark) => {
     setBookmarks((prev) => {
       if (prev.some((b) => b.id === bookmark.id)) return prev
@@ -91,8 +68,7 @@ export default function BookmarkDashboard({ user, initialBookmarks }: Props) {
     })
   }, [])
 
-  // ── Optimistic delete ─────────────────────────────────────────────────
-  // Removes from UI immediately; Realtime DELETE echo is handled idempotently
+  
   const handleDelete = useCallback((id: string) => {
     setBookmarks((prev) => prev.filter((b) => b.id !== id))
   }, [])

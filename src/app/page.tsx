@@ -1,9 +1,3 @@
-// Root page — Server Component
-// 1. Reads the current session from the server Supabase client
-// 2. Fetches user's initial bookmarks (RLS ensures privacy)
-// 3. Passes data to BookmarkDashboard (Client Component)
-// Middleware already guards this route, but we re-check to get the user object
-
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import BookmarkDashboard from '@/components/BookmarkDashboard'
@@ -22,8 +16,7 @@ export default async function HomePage() {
     redirect('/login')
   }
 
-  // Fetch initial bookmarks server-side so first paint is data-rich
-  // RLS on the bookmarks table ensures we only get rows for this user
+  
   const { data: bookmarks, error: bookmarksError } = await supabase
     .from('bookmarks')
     .select('*')

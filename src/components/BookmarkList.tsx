@@ -1,7 +1,4 @@
 'use client'
-// Renders the list of BookmarkCards
-// Shows an illustrated empty state when the list is empty
-
 import BookmarkCard from './BookmarkCard'
 import type { Bookmark } from '@/types'
 

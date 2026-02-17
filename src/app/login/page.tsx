@@ -1,7 +1,3 @@
-// Login page — Server Component
-// Checks if already authenticated → redirect to dashboard
-// Otherwise renders the LoginCard client component
-
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import LoginCard from '@/components/LoginCard'

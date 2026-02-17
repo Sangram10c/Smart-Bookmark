@@ -1,24 +1,14 @@
-// Bookmarks API Route Handlers
-//
-// POST   /api/bookmarks        → create a new bookmark
-// DELETE /api/bookmarks?id=... → delete a bookmark by id
-//
-// Each handler:
-//   1. Verifies the user is authenticated (server-side JWT validation)
-//   2. Validates the request
-//   3. Runs the DB mutation (RLS enforces ownership at the Postgres level)
-//   4. Returns JSON
 
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 
-// ── POST — create a bookmark ───────────────────────────────────────────────
+
 export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
 
-    // Verify authentication
+    
     const {
       data: { user },
       error: userError,
@@ -28,11 +18,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Parse request body
+    
     const body = await request.json()
     const { url, title } = body as { url?: string; title?: string }
 
-    // Validate required fields
+    
     if (!url || !title) {
       return NextResponse.json(
         { error: 'url and title are required' },
@@ -50,8 +40,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Insert into database
-    // RLS policy "Users can insert own bookmarks" enforces user_id = auth.uid()
+    
     const { data, error } = await supabase
       .from('bookmarks')
       .insert({
@@ -74,7 +63,7 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// ── DELETE — remove a bookmark ─────────────────────────────────────────────
+
 export async function DELETE(request: NextRequest) {
   try {
     const supabase = await createClient()
@@ -88,7 +77,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get bookmark id from query string: DELETE /api/bookmarks?id=<uuid>
+    
     const { searchParams } = new URL(request.url)
     const id = searchParams.get('id')
 
@@ -99,8 +88,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    // Delete the row
-    // The .eq('user_id', user.id) is belt-and-suspenders on top of RLS
+   
     const { error } = await supabase
       .from('bookmarks')
       .delete()

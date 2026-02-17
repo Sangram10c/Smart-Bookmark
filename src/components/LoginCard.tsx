@@ -1,8 +1,4 @@
 'use client'
-// Client Component — Google OAuth sign-in card
-// Calls supabase.auth.signInWithOAuth() to start the Google PKCE flow
-// The redirectTo must match what's registered in Supabase + Google Cloud
-
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
 
