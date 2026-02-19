@@ -1,3 +1,4 @@
+
 # 📚 Markd — Smart Bookmark Manager
 
 A beautiful, real-time bookmark manager built with **Next.js 14 (App Router)**, **Supabase** (Auth + Database + Realtime), and **Tailwind CSS**.
